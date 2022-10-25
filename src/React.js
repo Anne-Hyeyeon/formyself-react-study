@@ -16,3 +16,12 @@ export function createDOM(node) {
     // 재귀적으로 작동하는 code : 아무리 깊은 자식 요소가 있더라도 작동함.
     return element;
 }
+
+export function createElement(tag, props, ...children) {
+    props = props || {};
+     return { tag, props, children }
+}
+
+export function render(vdom, container){
+    container.appendChild(createDOM(vdom));
+}
