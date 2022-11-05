@@ -212,3 +212,70 @@ bind함수를 사용하면 this는 내가 정한 object로 고정된다.
 -> js는 함수 호출한 주체가 누구냐에 따라 this의 참조가 바뀐다.
  
 우리가 DOM 자체를 만드는 건 그렇게 어려운 게 아니구나 ‘ㅁ’
+
+
+
+function createDOM(node) {
+    // children이 객체가 아니라 문자열일 경우, 재귀적으로 들어갔을 때 먹히지 않을 수 있음. 따라서 태그가 아닐 경우, 문자열로 들어올 때의 처리 방안을 적어준다.
+    if (typeof node === 'string'){
+        return document.createTextNode(node);
+        //children에 문자열이 들어올 경우 바로 문자열 출력
+    }
+
+    const element = document.createElement(node.tag);
+    
+    node.children
+    .map(createDOM) //node의 깊이만큼 계속 순회하게 됨
+    .forEach(element.appendChild.bind(element));
+    // 재귀적으로 작동하는 code : 아무리 깊은 자식 요소가 있더라도 작동함.
+    return element;
+}
+
+const node = {
+    tag: "p",
+    props: {},
+    children: [
+        {
+            tag: "h1",
+            props: {},
+            children: [
+                //자식 요소로 태그도 있을 수 있지만, text 컨텐츠도 가능하다.
+                "리액트 만들기"
+            ],
+        },
+        {
+            tag: "ul",
+            props: {},
+            children: [
+                {
+                    tag: "li",
+                    props: {},
+                    children: ["첫 번째 아이템"],
+                },
+                {
+                    tag: "li",
+                    props: {},
+                    children: ["두 번째 아이템"],
+                },
+                {
+                    tag: "li",
+                    props: {},
+                    children: ["세 번째 아이템"],
+                }
+            ],
+        }
+    ],
+}
+
+document.querySelector('#root')
+.appendChild(createDOM(node));
+//node을 입력으로 주고 element를 return하게 된다.
+
+*깨알 복습
+map 메서드는 콜백 함수를 이용해 각각의 요소에 호출해서 그 값을 변환할 수 있게 해 준다.
+콜백 함수는 배열의 각 요소에 실행된 후, 새 값을 퉤 하고 뱉어낸다.
+
+완전한 map()메소드 구문
+arr.map(function(element, index, array){  }, this);
+
+Foreach 메서드는 콜백 함수, 익명 함수를 이용해 배열을 순회한다. 
