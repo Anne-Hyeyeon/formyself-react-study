@@ -279,3 +279,25 @@ map 메서드는 콜백 함수를 이용해 각각의 요소에 호출해서 그
 arr.map(function(element, index, array){  }, this);
 
 Foreach 메서드는 콜백 함수, 익명 함수를 이용해 배열을 순회한다. 
+
+
+
+
+
+03. webpack과 babel 세팅
+build할 수 있는 구조로 만들기
+
+1. 프로젝트를 npm이 가능하도록 셋업해둔다. npm init으로 package.json 생성 
+2. 웹팩 설치
+	npm install webpack-cli --save-dev
+여기서 cli는 웹팩의 이름 / 개발환경에서 쓸 것이므로 save dev 넣어줌 
+3. 웹팩 데브서버 설치, 바벨 로더, 바벨 플러그인(바벨 코어, 바벨 preset-env, preset-react 설치
+npm install webpack-dev-server babel-loader @babel/preset-env @babel/preset-react html-webpack-plugin --save-dev
+node_modules 폴더 만들어짐
+
+*여기서 잠깐
+웹팩이란? 모듈 번들링이라고 한다.
+모듈 번들링이란 : html파일에 들어가는 js파일을 하나의 js파일로 만들어주는 방식 
+다수의 js파일을 하나의 js파일로 만들어주는 것을 웹펙이라고 한다.
+
+
