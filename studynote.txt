@@ -318,3 +318,85 @@ ES6 이상의 문법으로 만들어진 js파일을 입력으로 받고(엔트�
 모듈에 이것을 ES5로 변환해주는 트랜스파일러를 세팅한 후
 플러그인에다가 콘솔로그, 주석을 제거하는 plugin을 세팅해주고 
 번들링을 돌리면 순서대로 실행이 된다.
+
+
+6. 모드 : web pack 파일의 용도 - 최종 서비스 할 파일을 만들 것인가? 개발할 파일을 만드는 것인가?
+
+7. entry : 입력을 지정한다. App.js
+
+8. output : path : 디렉토리명 (다른 컴퓨터 시스템, 다른 os에서도 build를 할 때 동작할 수 있게! 간단하게 node가 제공하는 path라는 패키지를이용해 지정해 보자.)
+nodeJS파일의 경우, require 구문을 쓰게 된다.
+
+const path = require(‘path’);
+ path.resolve(__dirname, ’dist’), dirname은 노드 js가 제공해주는 것. 
+ filename: 파일이름 bundle.js가 흔히 쓰인다.
+
+9. module 안에 들어가는 것 
+ rules 가 들어가는 이유? webpack이 정한 규칙이다. rules안에는 loader들이 들어간다. 
+ 여기서 loader이 n개니까 rules은 배열이고, 거기에 각각의 loader들이 어떻게 동작할지를 넣어주기 때문에 객체를 넣어준다. 
+이때 key는 use를 쓰는데, loader에다가 로더의 이름을 넣어준다. options 에다가는 presets, presets 바벨 플러그인 이름들을 넣어준다.
+
+문제! 모든 입력 파일이 babel-loader,가 처리할 수 있는 js파일이 아닐 수도 있다. css파일, 이미지 파일 등 다양한 파일 형식이 입력될 수 있다.
+
+10. 따라서 필요 없는 파일들을 제거할 수 있는 ‘test’라는 옵션을 추가한다. test에는 정규식이 들어간다.  
+
+test: /\.js$/,
+이렇게 입력하면 확장자가 js파일만 넣어줘, 라는 뜻이 된다 :)
+
+11. 두 번째, node_modules 같은 특정 디렉토리들을 제외한다. exclude 옵션을 이용함.
+exclude: /node_modules/,
+
+
+
+12. plugin 세팅 
+html webpack plugin : html파일을 받아서 최종적인 bundiling 파일에 output으로 내보낼 때 사용될 html파일을 생성하거나, 템플릿화해서 다른 부가적인 처리를 할 수도 있는 기능을 제공한다.
+
+
+const HtmlWebpackPlugin = require('html-webpack-plugin');
+으로 웹팩플러그인 깔아준 후 new를 이용해 인스턴스를 생성한다.
+
+ new HtmlWebpackPlugin({
+            title: 'webpack & babel setup',
+            template: 'index.html',
+        })
+다음과 같이 넣어주기!
+
+
+13. babel.config.json으로 바벨 관련 추가 설정하기
+
+{
+    "presets":["@babel/preset"]
+}
+
+입력
+
+14. devServer관련 세팅
+    compress: true,
+    port: 9999,
+
+
+15. package-json에 build 관련 내용 설정
+    "build": "webpack",
+    "dev" : "webpack serve”,
+
+scripts에 위 내용 추가한다.
+
+
+16. 이제 npm run build 해보면 dist라는 파일이 생기고, 그 밑에 html과 bundle.js파일이 생긴 걸 확인할 수 있다. 잘 작동!
+
+(참고로 npm run dev 할 경우에는 개발서버이기 때문에 번들.js가 생기지 않음)
+
+<script defer src="bundle.js"></script></head>
+을 지워주고 다시 build하기
+(템플릿 역할, 즉 스크립트가 변환되서 들어간 건 지워줘야 한다. 왜 그런지 좀 더 알아보기)
+
+17. 코드 정리
+프로젝트가 커지면  config 파일도 많아질테고, 소스코드와 Bundling 파일들이 구분이 좀 더 명확할 필요가 있다.
+
+따라서 개발할 때 쓰는 코드들은 다른 디렉토리로 분리하기.
+
+src 폴더 만들고 app.js 옮겨놓기! (번들링 오류가 난다.)
+
+src 폴더 안에다가 React.js를 만든 다음 app.js 내용 중 React와 관련되어 있는 기능을 옮겨 본다.
+
+function에 export 추가하면 불러와서 쓰는 게 가능해진다.
