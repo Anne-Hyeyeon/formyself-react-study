@@ -400,3 +400,18 @@ src 폴더 만들고 app.js 옮겨놓기! (번들링 오류가 난다.)
 src 폴더 안에다가 React.js를 만든 다음 app.js 내용 중 React와 관련되어 있는 기능을 옮겨 본다.
 
 function에 export 추가하면 불러와서 쓰는 게 가능해진다.
+
+
+이제 createDOM 에 아까전에 미구현했던 props 처리하는 걸 넣어보자.
+
+property를 처리하는, setAttribute하는 코드를 작성해보자.
+
+Element를 만든 다음, element의 setAttribute를 호출해준다.
+
+node의 안에 들어있는 props 속성 안에 있는 key를 문자열로 빼내서 작성해보자.
+
+
+
+아까 app.js를 src 안으로 옮겼기 떄문에, 웹팩컨피그의 app.js 경로를 ./src/app.js로 바꾸어주자.
+
+
