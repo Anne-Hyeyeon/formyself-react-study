@@ -437,5 +437,45 @@ DOM객체와 똑같이, root가 최상단인 트리 구조의 DOM가 만들어�
  
 참고로 이 방법은 createElement의 children을 가변인자로 다루는 방법을 채택하고 있기 때문에, 그 밑에 주루루룩 뭔가가 달리면 복잡해지는 단점이 있다.
  
+ 
+05. @jsx
+04의 코드는 겉으로 봐선 깔끔해 보이지만…아쉬운 점
+ 
+리액트 팀도 createElement(태그, 프롭스, 칠드런) 이 있는 함수를 하나 만들어서 사용했을 것이다. 하지만 굉장히 아쉽다 ㅠㅠ
+ 
+하지만 이렇게 함수 호출 방법은 굉장히 불편하다!
+ 
+프론트엔드 개발자들은 html 마크업이 가장 익숙하므로, createElement함수가 동작하는 방식으로 html 태그를 만들면 어떨까? ? -> JSX 문법
+ 
+ 
+ 
+자, 무대뽀로 이렇게 해보자. ㅋㅋ
+ 
+그러면
+Uncaught ReferenceError: React is not defined
+라는 오류가 뜨는데 이건 과연 무슨 뜻일까?
+ 
+이 코ㄷ는 우리가 webpack으로 Bundling을 하고 있다.
+webpack-config를 살펴보자. js파일은 babel-loader라고 하는 loader에가 전달이된다.
+ 
+참고로 babel-loader는 trasnpiler다. (ES6 이상의 문법으로 만들어진 코드를 ES5 분법으로 마이그레이션, 변환해주는  트랜스파일러)
+ 
+Babel-loader 에게 preset에 preset-react라는 presets 넘겨줌. preset-react는 플러그인인데 실제로 markup 구조를 React가 가지고 있는 createElement라고 하는 함수 호출 구문으로 바꿔 주는 역할을 포함하고 있다.
+ 
+Babel 홈페이지에다가 위 캡쳐한 vdom2 를 그대로 붙여넣어보자!
+React.createElement 라는 함수를 호출하고 있다. 인자는 세 개가 들어간다! 태그, 프롭스, 파일!! 우와아ㅏ
+ 
+그래서! 이 코드를 호출할 때 변환시켜줄 수 있는 ‘리액트’가 없다고 나오는 것이다.
+ 
+그러면 리액트의 JSX 문법은? html 마크업 언어를 createElement를 이용해 출력시켜 줌.
+ 
+ 
+ 
+/* @jsx createElement */
+ 
+ 
+맨 위에 붙여주면 바벨로더가 작동한다!!!
+createElement 자리에는 원래 React.createElement 오지롱
+
 
 
