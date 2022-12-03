@@ -479,3 +479,55 @@ createElement 자리에는 원래 React.createElement 오지롱
 
 
 
+
+
+하지만 이런 오류가 난다.
+속성이 없으면 null로 받기 때문에 ㅠ 
+Null 처리해주는 거 넣어야됨
+
+
+어떻게 해결할까? Default Parameter일까?
+
+Default parameter의 경우 들어오는 값이 undefined 인 경우에는 작동하기 때문에 소용이 없다.
+
+export function createElement(tag, props = {}, …children) {
+return { tag, props, children };
+
+null은 object로 취급해서 작동하지 않는다. 
+
+export function createElement(tag, props, ...children) {
+    props = props || {};
+     return { tag, props, children }
+}
+
+방어코드 작성!
+
+
+JSX라는 게 특별한 게 아니고, DOM 으로 변환될 간단한 객체를 만들기 위해서,
+헬퍼 함수, createElement를 만들었는데
+호출 과정이 불편하면 아무도 안 쓸테니,
+UI를 만들기 편하게 개발자들이 익숙한 html markup구조의 표현 방법을 개발한 것이다.
+
+이 표현 방법은 babel을 이용해 변환되어 구현된다 
+
+장점 : 돔보다 훨씬 간단한 구조물을 만들었음.
+markup이라는 형태를 취하며 구조도 보기 편하고, 작성도 쉽게 만들었다.
+
+변환기는 babel이 제공하고 있기 때문에! 우리는 변환기가 필요없다 ㅎㅎㅎ ;;;
+
+
+
+
+*구조에 기인한 제약사항*
+이렇게 JSX 를 사용할 경우 코드 상에서는 createElement가 없는 것처럼 보인다.
+하지만 transpiling 된 bundle 파일이 실행이 되고,
+번들파일이 jsx가 createElement 함수 호출 구문으로 바뀌게 되므로
+위에서 createElement를 코드 상에서 쓰고 있지 않지만 포함시켜줘야 한다.
+
+
+리액트에 컴포넌트를 작성하고 있는데, 
+함수컴포넌트에 React를 임포트하지 않으면..
+createELement를 import 하지 않으면 Build된 파일 안에서 그 코드를 찾지 못하기 때문에
+나중에 더 알아봐야 함 ㅠㅠㅠㅠ
+
+
